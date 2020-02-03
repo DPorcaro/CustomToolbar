@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 42065887a20fa924f879fa1998f335cf
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - _playTex: {fileID: 2800000, guid: a54b5c11580a7c542899aed8a0be86dc, type: 3}
+  - _pauseTex: {fileID: 2800000, guid: e3a5a8bc25c5e0f4a88654da82cabb8f, type: 3}
+  - _framestepTex: {fileID: 2800000, guid: 772b3dc11a8cf7646acc5efd246ca069, type: 3}
+  - _slowmotionTex: {fileID: 2800000, guid: bb87597a7ee67644f9de0f41b1c0b46f, type: 3}
+  - _presdPlayTex: {fileID: 2800000, guid: 81d237b081f80e94a946301173febe81, type: 3}
+  - _presdPauseTex: {fileID: 2800000, guid: bf3492ead7e6ac74e9498b2129a96556, type: 3}
+  - _presdFramestepTex: {fileID: 2800000, guid: 22c67b1f8b868ec4eb203c23ebc334d4,
+      type: 3}
+  - _presdSlowmotionTex: {fileID: 2800000, guid: 64e2f5f11f1b2ba489cb06c92029ab66,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
