@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace TomeSupreme.Levels.Pieces
+namespace CustomEditor.Windows
 {
     /// <summary>
     /// A custom toolbar with Play, Pause, Framestep and Slowmotion Buttons.
@@ -10,16 +10,13 @@ namespace TomeSupreme.Levels.Pieces
     {
         #region private attributes
 
-        [SerializeField]
-        private Texture2D _playTex = Resources.Load("Assets/CustomToolbar/Resources/Play.png") as Texture2D;
-        [SerializeField]
-        private Texture2D _pauseTex = Resources.Load("Assets/CustomToolbar/Resources/Pause.png") as Texture2D;
-        [SerializeField]
-        private Texture2D _framestepTex = Resources.Load("Assets/CustomToolbar/Resources/Framestep.png") as Texture2D;
-        [SerializeField]
-        private Texture2D _slowmotionTex = Resources.Load("Assets/CustomToolbar/Resources/Slowmotion.png") as Texture2D;
+        private const string path = "Assets/CustomToolbar/Resources/";
 
-        private Rect tabSize;
+        private Texture2D _playTex;
+        private Texture2D _pauseTex;
+        private Texture2D _framestepTex;
+        private Texture2D _slowmotionTex;
+
         private GUIContent _playBtn;
         private GUIContent _pauseBtn;
         private GUIContent _framestepBtn;
@@ -32,14 +29,24 @@ namespace TomeSupreme.Levels.Pieces
         /// Adds a menu entry in the windows menu.
         /// </summary>
         /// <returns></returns>
-        [MenuItem("Window/Custom Toolbar")]
+        [MenuItem("Window/Plug and Boom/Custom Toolbar")]
         public static CustomToolbar OpenWindow()
         {
-            return GetWindow<CustomToolbar>("Play Menu");
+            CustomToolbar customToolbar = GetWindow<CustomToolbar>("Custom Toolbar");
+            customToolbar.minSize = new Vector2(250, 60);
+            return customToolbar;
         }
         #endregion
 
         #region EditorWindow implementation
+        private void OnEnable()
+        {
+            _playTex = AssetDatabase.LoadAssetAtPath<Texture2D>($"{path}Play.png");
+            _pauseTex = AssetDatabase.LoadAssetAtPath<Texture2D>($"{path}Pause.png");
+            _framestepTex = AssetDatabase.LoadAssetAtPath<Texture2D>($"{path}Framestep.png");
+            _slowmotionTex = AssetDatabase.LoadAssetAtPath<Texture2D>($"{path}Slowmotion.png");
+        }
+
         private void OnInspectorUpdate()
         {
             Repaint();
@@ -47,12 +54,13 @@ namespace TomeSupreme.Levels.Pieces
 
         private void OnGUI()
         {
-            if (_playBtn == null) {
+            if(_playBtn == null) {
                 AssembleButtons();
             }
 
             // Create one Group to contain all the buttons
-            GUI.BeginGroup(new Rect((Screen.width / 2) - 81, 10, 180, 50));
+            GUI.BeginGroup(new Rect((this.position.width / 2) - 81, 10, 180, 50));
+
             // Create a group to contain the first 4 buttons
             GUILayout.BeginHorizontal(GUILayout.Width(120));
 
@@ -144,7 +152,10 @@ namespace TomeSupreme.Levels.Pieces
         #endregion
 
         #region private functions
-        // Creates a separate GUIContent for each of the 4 first buttons, assigning their tooltips and icons
+        /// <summary>
+        /// Creates a separate GUIContent for Play, Pause, Slow motion and Next Frame buttons, assigning their tooltips and icons
+        /// </summary>
+        /// <returns></returns>
         private void AssembleButtons()
         {
             _playBtn = new GUIContent(_playTex, "Play");
@@ -153,7 +164,10 @@ namespace TomeSupreme.Levels.Pieces
             _framestepBtn = new GUIContent(_framestepTex, "Next Frame");
         }
 
-        // Creates a GUIStyle for bigger buttons, with custom Width, Height, Margin and Background Texture
+        /// <summary>
+        /// Creates a GUIStyle for bigger buttons, with custom Width, Height, Margin and Background Texture
+        /// </summary>
+        /// <returns></returns>
         private GUIStyle CreateDefaultButton(bool pressed)
         {
             GUIStyle botao = new GUIStyle(GUI.skin.button);
@@ -169,7 +183,10 @@ namespace TomeSupreme.Levels.Pieces
             return botao;
         }
 
-        // Creates a GUIStyle for smaller buttons, with custom Width, Height, Margin and Background Texture
+        /// <summary>
+        /// Creates a GUIStyle for smaller buttons, with custom Width, Height, Margin and Background Texture
+        /// </summary>
+        /// <returns></returns>
         private GUIStyle CreateMicroButton(bool pressed)
         {
             GUIStyle botao = new GUIStyle(GUI.skin.button);
@@ -184,7 +201,10 @@ namespace TomeSupreme.Levels.Pieces
             return botao;
         }
 
-        // Creates a custom Texture2D (actually I just copied from the Unity Forum)
+        /// <summary>
+        /// Creates a custom Texture2D (actually I just copied from the Unity Forum)
+        /// </summary>
+        /// <returns></returns>
         private Texture2D MakeTex(int width, int height, Color col)
         {
             Color[] pix = new Color[width * height];
@@ -198,7 +218,10 @@ namespace TomeSupreme.Levels.Pieces
             return result;
         }
 
-        // Increases the play speed from 0.1 to 1, in 0.25 increments
+        /// <summary>
+        /// Increases the play speed from 0.1 to 1, in 0.25 increments
+        /// </summary>
+        /// <returns></returns>
         private void IncPlaySpeed()
         {
             if (Time.timeScale < 1f)
@@ -215,7 +238,10 @@ namespace TomeSupreme.Levels.Pieces
                 }
         }
 
-        // Decreases the play speed from 0.75 to 0.1, in 0.25 increments
+        /// <summary>
+        /// Decreases the play speed from 0.75 to 0.1, in 0.25 increments
+        /// </summary>
+        /// <returns></returns>
         private void DecPlaySpeed()
         {
             if (Time.timeScale < 1f)
