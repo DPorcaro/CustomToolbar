@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using static UnityEditor.EditorApplication;
 
 namespace CustomEditor.Windows
 {
@@ -54,7 +55,8 @@ namespace CustomEditor.Windows
 
         private void OnGUI()
         {
-            if(_playBtn == null) {
+            if (_playBtn == null)
+            {
                 AssembleButtons();
             }
 
@@ -65,39 +67,40 @@ namespace CustomEditor.Windows
             GUILayout.BeginHorizontal(GUILayout.Width(120));
 
             // Makes the Play button grayed out if the Game Tab is on Play mode
-            if (EditorApplication.isPlaying) {
+            if (isPlaying)
+            {
                 if (GUILayout.Button(_playBtn, CreateDefaultButton(true)))
                 { 
-                    EditorApplication.ExecuteMenuItem("Edit/Play");
+                    ExecuteMenuItem("Edit/Play");
                 }
             } // Make the Play button
             else if (GUILayout.Button(_playBtn, CreateDefaultButton(false)))
             {
-                EditorApplication.ExecuteMenuItem("Edit/Play");
+                ExecuteMenuItem("Edit/Play");
             }
 
             // Makes the Pause button grayed out if the Game Tab is Paused
-            if (EditorApplication.isPaused)
+            if (isPaused)
             {
                 if (GUILayout.Button(_pauseBtn, CreateDefaultButton(true)))
                 {
-                    EditorApplication.ExecuteMenuItem("Edit/Pause");
+                    ExecuteMenuItem("Edit/Pause");
                     Time.timeScale = 1;
                 }
             }// Make the Pause button
             else if (GUILayout.Button(_pauseBtn, CreateDefaultButton(false)))
             {
-                EditorApplication.ExecuteMenuItem("Edit/Pause");
+                ExecuteMenuItem("Edit/Pause");
             }
 
             // Make the Framestep button
             if (GUILayout.Button(_framestepBtn, CreateDefaultButton(false)))
             {
-                EditorApplication.ExecuteMenuItem("Edit/Step");
+                ExecuteMenuItem("Edit/Step");
             }
 
             // Makes the Slowmotion button grayed out if the Time.timeScale is less than 1x
-            if ((EditorApplication.isPlaying) && (Time.timeScale < 1))
+            if (isPlaying && Time.timeScale < 1)
             {
                 if (GUILayout.Button(_slowmotionBtn, CreateDefaultButton(true)))
                 {
@@ -106,7 +109,7 @@ namespace CustomEditor.Windows
             } // Make the Slowmotion button
             else if (GUILayout.Button(_slowmotionBtn, CreateDefaultButton(false)))
             {
-                if (EditorApplication.isPlaying && Time.timeScale >= 1f)
+                if (isPlaying && Time.timeScale >= 1f)
                 {
                     Time.timeScale = 0.75f;
                 }
@@ -114,7 +117,7 @@ namespace CustomEditor.Windows
             GUILayout.BeginVertical(); // Creates a new group for the Slowmotion speed controls
 
             // Make the "plus" microbutton grayed out if Time.timeScale is between 0.75 and 1
-            if ((EditorApplication.isPlaying) && (Time.timeScale >= 0.75f) && (Time.timeScale < 1))
+            if (isPlaying && Time.timeScale >= 0.75f && Time.timeScale < 1)
             {
                 if (GUILayout.Button("+", CreateMicroButton(true)))
                 {
@@ -125,7 +128,7 @@ namespace CustomEditor.Windows
             {
                 IncPlaySpeed();
             }
-            if ((EditorApplication.isPlaying) && (Time.timeScale <= 0.25f))
+            if (isPlaying && Time.timeScale <= 0.25f)
             {
                 if (GUILayout.Button("-", CreateMicroButton(true)))
                 {
@@ -141,9 +144,9 @@ namespace CustomEditor.Windows
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal(GUILayout.Width(120)); // Creates a new group for a label
 
-            if ((EditorApplication.isPlaying)) // When the Game Tab is on Play Mode, shows the current Time.timeScale
+            if (isPlaying) // When the Game Tab is on Play Mode, shows the current Time.timeScale
             {
-                GUILayout.Label("Play Speed: " + Time.timeScale.ToString() + "x", GUI.skin.label);
+                GUILayout.Label($"Play Speed: {Time.timeScale} x", GUI.skin.label);
             }
 
             GUILayout.EndHorizontal();
@@ -170,17 +173,19 @@ namespace CustomEditor.Windows
         /// <returns></returns>
         private GUIStyle CreateDefaultButton(bool pressed)
         {
-            GUIStyle botao = new GUIStyle(GUI.skin.button);
-            botao.fixedWidth = 36;
-            botao.fixedHeight = 26;
-            botao.margin = new RectOffset(0, 0, 0, 0);
+            GUIStyle button = new GUIStyle(GUI.skin.button)
+            {
+                fixedWidth = 36,
+                fixedHeight = 26,
+                margin = new RectOffset(0, 0, 0, 0)
+            };
 
             if (pressed)
             {
-                botao.normal.background = MakeTex(1, 1, new Color(0f, 0f, 0f, 0.5f));
+                button.normal.background = MakeTex(1, 1, new Color(0f, 0f, 0f, 0.5f));
             }
 
-            return botao;
+            return button;
         }
 
         /// <summary>
@@ -189,16 +194,19 @@ namespace CustomEditor.Windows
         /// <returns></returns>
         private GUIStyle CreateMicroButton(bool pressed)
         {
-            GUIStyle botao = new GUIStyle(GUI.skin.button);
-            botao.fixedWidth = 17;
-            botao.fixedHeight = 13;
-            botao.margin = new RectOffset(0, 0, 0, 0);
+            GUIStyle button = new GUIStyle(GUI.skin.button)
+            {
+                fixedWidth = 17,
+                fixedHeight = 13,
+                margin = new RectOffset(0, 0, 0, 0)
+            };
 
-            if (pressed) {
-                botao.normal.background = MakeTex(1, 1, new Color(0f, 0f, 0f, 0.5f));
+            if (pressed)
+            {
+                button.normal.background = MakeTex(1, 1, new Color(0f, 0f, 0f, 0.5f));
             }
 
-            return botao;
+            return button;
         }
 
         /// <summary>
@@ -231,8 +239,9 @@ namespace CustomEditor.Windows
                     {
                         Time.timeScale = 0f;
                     }
-                    Time.timeScale = Time.timeScale + 0.25f;
-                }else
+                    Time.timeScale += 0.25f;
+                }
+                else
                 {
                     Time.timeScale = 1f;
                 }
@@ -248,7 +257,7 @@ namespace CustomEditor.Windows
             {
                 if (Time.timeScale > 0.25f)
                 {
-                    Time.timeScale = Time.timeScale - 0.25f;
+                    Time.timeScale -= 0.25f;
                 }
                 else
                 {
